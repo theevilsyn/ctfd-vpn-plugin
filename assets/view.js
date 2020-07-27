@@ -13,7 +13,7 @@ CTFd._internal.challenge.render = function (markdown) {
 CTFd._internal.challenge.postRender = function () { }
 
 
-window.challenge.submit = function (cb, preview) {
+CTFd._internal.challenge.submit = function (cb, preview) {
     var challenge_id = parseInt($('#challenge-id').val());
     var submission = $('#submission-input').val();
     var url = "/api/v1/challenges/attempt";
