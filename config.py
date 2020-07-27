@@ -1,2 +1,2 @@
-registrar_host="localhost"
-registrar_port=3960
+registrar_host="52.188.48.244"
+registrar_port=8793
