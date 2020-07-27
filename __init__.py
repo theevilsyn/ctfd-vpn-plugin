@@ -41,7 +41,7 @@ class PentestChallengeModel(Challenges):
         self.state = state
         self.pentestchall_name = pentestchall_name
 
-class pentestChallenge(BaseChallenge):
+class PentestChallenge(BaseChallenge):
     id = "pentest"  # Unique identifier used to register challenges
     name = "pentest"  # Name of a challenge type
     templates = {  # Nunjucks templates used for each aspect of challenge editing & viewing
@@ -65,7 +65,7 @@ class pentestChallenge(BaseChallenge):
         """
         data = request.form or request.get_json()
 
-        challenge = pentestChallengeModel(**data)
+        challenge = PentestChallengeModel(**data)
 
         db.session.add(challenge)
         db.session.commit()
@@ -91,10 +91,10 @@ class pentestChallenge(BaseChallenge):
             'max_attempts': challenge.max_attempts,
             'type': challenge.type,
             'type_data': {
-                'id': pentestChallenge.id,
-                'name': pentestChallenge.name,
-                'templates': pentestChallenge.templates,
-                'scripts': pentestChallenge.scripts,
+                'id': PentestChallenge.id,
+                'name': PentestChallenge.name,
+                'templates': PentestChallenge.templates,
+                'scripts': PentestChallenge.scripts,
             }
         }
         return data
@@ -133,7 +133,7 @@ class pentestChallenge(BaseChallenge):
         ChallengeFiles.query.filter_by(challenge_id=challenge.id).delete()
         Tags.query.filter_by(challenge_id=challenge.id).delete()
         Hints.query.filter_by(challenge_id=challenge.id).delete()
-        pentestChallengeModel.query.filter_by(id=challenge.id).delete()
+        PentestChallengeModel.query.filter_by(id=challenge.id).delete()
         Challenges.query.filter_by(id=challenge.id).delete()
         db.session.commit()
 
@@ -224,7 +224,7 @@ def send_config(host, escaped_chalname, escaped_clientname):
 
 def load(app):
     app.db.create_all()
-    CHALLENGE_CLASSES['pentest'] = pentestChallenge
+    CHALLENGE_CLASSES['pentest'] = PentestChallenge
 
     # Intitialize logging.
     logger.setLevel(logging.INFO)
@@ -253,7 +253,7 @@ def load(app):
         else:
             clientname = get_current_user().name
 
-        chal = pentestChallengeModel.query.filter_by(id=chalid).first_or_404()
+        chal = PentestChallengeModel.query.filter_by(id=chalid).first_or_404()
         if chal.state == 'hidden':
             logger.info("[404] Client {0} requested config for hidden challenge {1}".format(clientname, chal.name))
             abort(404)
@@ -285,3 +285,4 @@ def load(app):
             raise
 
     register_plugin_assets_directory(app, base_path='/plugins/{0}/assets/'.format(plugin_dirname))
+
